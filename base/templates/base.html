@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% load static %}
+
+    <meta charset="UTF-8" />
+
+    <link rel="stylesheet" href="{% static 'style/base.css' %}" />
+    {% block styles %} {% endblock styles %}
+
+    <meta name="theme-color" content="#4e49d1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>{% block title %}Alex Freeman{% endblock title %}</title>
+  </head>
+
+  <body>
+    <header>
+      {% block header %}
+
+      <div id="image-and-name">
+        <img src="{% static 'images/NarcissusInverted.jpg' %}" alt="Logo" />
+        <div>
+          <h1 id="pagename">
+            {% block pagename %}The Alex Freeman{% endblock pagename %}
+          </h1>
+          <h3 id="tagline">
+            {% block tagline %}Official Web Presence{% endblock tagline %}
+          </h3>
+        </div>
+      </div>
+
+      <nav style="float: right">
+        {% block nav %}
+        <ul>
+          <li><a href="{% url 'index' %}">Home</a></li>
+        </ul>
+      </nav>
+      {% endblock nav %} {% endblock header %}
+    </header>
+
+    <div id="banner">
+      {% block bannerimage %}
+      <img src="{% static 'images/IslayHillSunrise-scaled.jpg' %}" alt="Logo" />
+      {% endblock bannerimage %}
+      <caption>
+        {% block bannercaption %}Hello, world.{% endblock bannercaption %}
+      </caption>
+    </div>
+
+    <main>{% block main %} {% endblock main %}</main>
+
+    <footer>
+      {% block footer %}
+      <p>&copy; 2024 The Alex Freeman</p>
+      {% endblock footer %}
+    </footer>
+
+    <script src="{% static 'scripts/base.js' %}"></script>
+    {% block scripts %} {% endblock scripts %}
+  </body>
+</html>

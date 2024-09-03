@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+<!-- Centered two-column layout -->
+
+{% block main %}
+<section class="centered">
+  <section class="left">{% block left %} {% endblock left %}</section>
+  <section class="right">{% block right %} {% endblock right %}</section>
+</section>
+{% endblock main %}

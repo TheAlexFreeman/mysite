@@ -1,0 +1,159 @@
+body {
+    margin: 0;
+    background-color: #222;
+    color: #fed;
+    font-family: 'Arial Narrow', Arial, sans-serif;
+    font-size: large;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-between;
+    min-height: 100vh;
+}
+
+a {
+    color: #babeee;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #dadeee;
+}
+
+a:visited {
+    color: #dadeee;
+}
+
+a:visited:hover {
+    color: #babeee;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #edc;
+}
+
+/* Main content block */
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+}
+
+main aside {
+    width: 20%;
+    max-width: 200px;
+    padding: 1em;
+    background-color: #111;
+    color: #ccc;
+}
+
+main article {
+    flex: 1;
+    padding: 1em;
+    background-color: #333;
+    color: #ccc;
+}
+
+/* Header */
+
+header {
+    background-color: #000;
+    height: fit-content;
+    color: #afafaf;
+    padding: 0.5em 1em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#image-and-name {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5em;
+}
+
+header h1, header h2, header h3, header h4, header h5, header h6 {
+    margin: 0;
+    padding: 0;
+    color: #afafaf;
+    position: relative;
+}
+
+#pagename {
+    top: -0.25em;
+}
+
+#tagline {
+    padding-left: 1em;
+}
+
+header img {
+    display: inline;
+    width: 100px;
+    height: 100px;
+}
+
+header a {
+    color: #ccc;
+}
+
+header a:hover {
+    color: #dadeee;
+}
+
+header a:visited {
+    color: #ccc;
+}
+
+header a:visited:hover {
+    color: #dadeee;
+}
+
+/* Navigation */
+
+nav {
+    background-color: #000;
+    color: #ccc;
+    padding: 0.5em;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    padding: 0.25em 0.5em;
+}
+
+/* Banner */
+
+#banner {
+    color: #afafaf;
+    text-align: center;
+}
+
+#banner h1, #banner h2, #banner h3, #banner h4, #banner h5, #banner h6 {
+    margin: 10px 0;
+    color: #afafaf;
+}
+
+#banner img {
+    width: 100%;
+}
+
+/* Footer */
+
+footer {
+    background-color: #000;
+    color: #afafaf;
+    padding: 0.5em;
+    text-align: center;
+}
+
+
