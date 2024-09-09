@@ -1,6 +1,18 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% load static %}
+
+<!-- Title of the page -->
+{% block title %}{{ block.super }}{% endblock title %}
 
 <!-- Centered single-column layout -->
+{% block styles %}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'style/layout/centered.css' %}"
+/>
+{% endblock styles %}
+
+<!-- Main page content -->
 
 {% block main %}
 <section class="centered">{% block content %} {% endblock content %}</section>

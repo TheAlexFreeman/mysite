@@ -39,12 +39,18 @@
       {% endblock nav %} {% endblock header %}
     </header>
 
+    <div id="page-title">
+      <h1>{% block pagetitle %}Hello, World{% endblock pagetitle %}</h1>
+    </div>
+
     <div id="banner">
       {% block bannerimage %}
       <img src="{% static 'images/IslayHillSunrise-scaled.jpg' %}" alt="Logo" />
       {% endblock bannerimage %}
       <caption>
-        {% block bannercaption %}Hello, world.{% endblock bannercaption %}
+        <p class="caption">
+          {% block bannercaption %}Hello, world.{% endblock bannercaption %}
+        </p>
       </caption>
     </div>
 
