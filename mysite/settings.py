@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
     "base.apps.BaseConfig",
     "home.apps.HomeConfig",
+    "gas.apps.GasConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
