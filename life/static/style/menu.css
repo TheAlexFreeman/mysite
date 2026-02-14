@@ -1,0 +1,72 @@
+#menu-header {
+  border-bottom: 2px solid black;
+}
+
+#menu-wrapper {
+  position: relative;
+  margin-bottom: 100px;
+}
+
+#menu-root {
+  height: 500px;
+  max-width: 100vw;
+  overflow: auto;
+  margin-top: 25px;
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+}
+
+#menu-root::-webkit-scrollbar {
+  display: none;
+}
+
+#menu-root > table {
+  width: 100%;
+  max-width: 100vw;
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+.menu-table-header {
+  position: absolute;
+  top: -25px;
+  margin-left: -30px;
+  z-index: 2;
+  font-size: larger;
+  font-weight: bold;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+
+tr.menu-item > td {
+  border-bottom: 1px solid gray;
+  border-right: 1px solid gray;
+  padding-left: 20px;
+}
+
+td.pattern-name {
+  cursor: pointer;
+  text-decoration: underline;
+  width: 200px;
+}
+
+.preview-grid-frame {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.rotate-button {
+  cursor: pointer;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.rotate-button:hover {
+  text-decoration: underline;
+}
+
+.flip-button {
+  cursor: pointer;
+  font-size: 30px;
+  font-weight: bold;
+  margin-left: 35px;
+}
