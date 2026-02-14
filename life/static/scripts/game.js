@@ -128,26 +128,6 @@ class Game {
     return this._relevantCells.filter((p) => this._needsUpdate(p));
   }
 
-  _getUpdate(point) {
-    const liveNeighbors = this._liveNeighbors(point);
-    const liveNeighborCount = liveNeighbors.length;
-    if (liveNeighborCount < 2) {
-      this._relevantCells.remove(point);
-    }
-
-    if (this.hasCell(point)) {
-      return liveNeighborCount < 2 || liveNeighborCount > 3
-        ? { ...point, value: null }
-        : null;
-    }
-
-    if (liveNeighborCount !== 3) return null;
-
-    const value = this._nextColor(liveNeighbors.map((p) => p.value));
-
-    return { ...point, value };
-  }
-
   _needsUpdate(point) {
     const liveNeighbors = this._liveNeighbors(point);
     const liveNeighborCount = liveNeighbors.length;
@@ -193,7 +173,6 @@ class Game {
     return {
       x: (x + point.x) % x,
       y: (y + point.y) % y,
-      value: point.value,
     };
   }
 }
