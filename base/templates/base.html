@@ -15,6 +15,7 @@
   </head>
 
   <body>
+    {% block body %}
     <header>
       {% block header %}
 
@@ -68,6 +69,6 @@
     </footer>
 
     <script src="{% static 'scripts/base.js' %}"></script>
-    {% block scripts %} {% endblock scripts %}
+    {% block scripts %} {% endblock scripts %} {% endblock body %}
   </body>
 </html>

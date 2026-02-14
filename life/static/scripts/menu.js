@@ -108,7 +108,7 @@ class PatternMenu {
     const points = new Points(...pattern.points);
     const padding = { x: 2, y: 2 };
     const size = ptAdd(points.boundingBox, ptAdd(padding, padding));
-    return new GameDemo(
+    return new DemoBoard(
       { ...SETTINGS, size },
       frame,
       points.translateToList(padding.x, padding.y),

@@ -135,9 +135,9 @@ function updateBackgroundColorAction() {
 }
 
 function getPatternsAction() {
-  apiGetAllPatterns().then((patterns) => {
-    patterns.forEach((pattern) => MENU.addPattern(pattern));
-  });
+  // apiGetAllPatterns().then((patterns) => {
+  //   patterns.forEach((pattern) => MENU.addPattern(pattern));
+  // });
 }
 
 function savePatternAction() {

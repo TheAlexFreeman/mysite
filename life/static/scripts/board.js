@@ -1,7 +1,7 @@
 class GameBoard {
   _grid;
   _frame;
-  _gameLogic;
+  _game;
   _settings = {
     colors: { on: "limegreen", off: "lightgray" },
   };
@@ -15,10 +15,10 @@ class GameBoard {
   }
 
   get size() {
-    return this._gameLogic.size;
+    return this._game.size;
   }
   set size(value = { x: 1, y: 1 }) {
-    this._gameLogic.size = value;
+    this._game.size = value;
     if (this._frame) {
       this.displayGrid(this._frame);
     }
@@ -41,10 +41,10 @@ class GameBoard {
   }
 
   get borders() {
-    return this._gameLogic.borders;
+    return this._game.borders;
   }
   set borders(value = false) {
-    this._gameLogic.borders = value;
+    this._game.borders = value;
     this._grid.setBorders(value);
   }
 
@@ -57,24 +57,24 @@ class GameBoard {
   }
 
   get isRunning() {
-    return this._gameLogic.isRunning;
+    return this._game.isRunning;
   }
 
   get cells() {
-    return this._gameLogic.liveCells;
+    return this._game.liveCells;
   }
 
   get pattern() {
-    return this._gameLogic.normalizedCells;
+    return this._game.normalizedCells;
   }
 
   get population() {
-    return this._gameLogic.population;
+    return this._game.population;
   }
 
   constructor(settings, frame = null, cells = []) {
     this._frame = frame;
-    this._gameLogic = new GameLogic(settings.size, settings.borders);
+    this._game = new Game(settings.size, settings.borders);
     this._settings.colors = settings.colors;
     this.size = settings.size;
     cells.forEach((p) => this.addCell(p));
@@ -88,16 +88,16 @@ class GameBoard {
   }
 
   hasCell(p) {
-    return this._gameLogic.hasCell(p);
+    return this._game.hasCell(p);
   }
 
   addCell(p, color = "limegreen") {
-    this._gameLogic.addCell(p);
+    this._game.addCell(p);
     this._grid.setColor(p, color);
   }
 
   removeCell(p) {
-    this._gameLogic.removeCell(p);
+    this._game.removeCell(p);
     this._grid.setColor(p, this.colors.off);
   }
 
@@ -112,7 +112,7 @@ class GameBoard {
   }
 
   rotate(clockwise = true) {
-    const rotatedCells = this._gameLogic.rotate(clockwise);
+    const rotatedCells = this._game.rotate(clockwise);
     this.clear();
     const { x, y } = this.size;
     this.size = { x: y, y: x };
@@ -120,24 +120,24 @@ class GameBoard {
   }
 
   flip(vertical = true) {
-    const flippedCells = this._gameLogic.flip(vertical);
+    const flippedCells = this._game.flip(vertical);
     this.clear();
     this.addPattern(flippedCells);
   }
 
   clear() {
     this.cells.forEach((p) => this.removeCell(p));
-    this._gameLogic.clear();
+    this._game.clear();
   }
 
   addPattern(pattern, dx = 0, dy = 0) {
-    const newCells = this._gameLogic.addPattern(pattern, dx, dy);
+    const newCells = this._game.addPattern(pattern, dx, dy);
     newCells.forEach((p) => this._grid.setColor(p, this.colors.on));
     return newCells;
   }
 
   tick() {
-    const changes = this._gameLogic.tick();
+    const changes = this._game.tick();
     changes.forEach((p) => this._correctColor(p));
     return changes;
   }
@@ -147,7 +147,7 @@ class GameBoard {
   }
 
   play(tickMS, tick = () => this.tick()) {
-    this._gameLogic.play(tickMS, tick);
+    this._game.play(tickMS, tick);
   }
 
   playWhile(tickMS, condition = () => true, onStop = null) {
@@ -158,7 +158,7 @@ class GameBoard {
         this.stop(onStop);
       }
     };
-    this._gameLogic.play(tickMS, tick);
+    this._game.play(tickMS, tick);
   }
 
   playGenerations(tickMS, generations = Infinity, onStop = null) {
@@ -171,11 +171,11 @@ class GameBoard {
         this.stop(onStop);
       }
     };
-    this._gameLogic.play(tickMS, tick);
+    this._game.play(tickMS, tick);
   }
 
   stop(callback = null) {
-    this._gameLogic.stop();
+    this._game.stop();
     if (callback) callback();
   }
 }
@@ -294,7 +294,7 @@ class PlayableBoard extends GameBoard {
       : (cell) => {
           this._grid.setColorAndOpacity(cell, this._colorAt(cell), 1.0);
         };
-    for (let cell of this._gameLogic.translatePattern(pattern, dx, dy)) {
+    for (let cell of this._game.translatePattern(pattern, dx, dy)) {
       previewCell(cell);
     }
   }
