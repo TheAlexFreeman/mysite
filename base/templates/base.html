@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     {% load static %}
@@ -7,6 +7,28 @@
 
     <link rel="stylesheet" href="{% static 'style/base.css' %}" />
     {% block styles %} {% endblock styles %}
+
+    <!-- Favicon -->
+    {% block favicon %}
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="{% static 'favicon/apple-touch-icon.png' %}"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="{% static 'favicon/favicon-32x32.png' %}"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="{% static 'favicon/favicon-16x16.png' %}"
+    />
+    <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}" />
+    {% endblock favicon %}
 
     <meta name="theme-color" content="#4e49d1" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
