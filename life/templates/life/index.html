@@ -132,24 +132,6 @@
     </div>
 
     <br />
-
-    <div id="grid-library">
-      <label for="pattern-name">
-        Pattern Name:
-        <input id="pattern-name" type="text" />
-      </label>
-      <button onclick="savePatternAction()">Save Current Board</button>
-      <label for="pattern-menu">
-        Saved Patterns:
-        <select
-          id="pattern-menu"
-          onfocus="getPatternsAction()"
-          onchange="loadPatternAction()"
-        >
-          <option disabled selected value="">No patterns available</option>
-        </select>
-      </label>
-    </div>
   </div>
 
   <div id="game-buttons">
@@ -214,8 +196,6 @@
     },
   ]);
   MENU.onPatternSelected = (pattern) => setPreviewPattern(pattern);
-
-  getPatternsAction();
 
   // User Actions
 
