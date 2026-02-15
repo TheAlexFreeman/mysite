@@ -1,0 +1,408 @@
+{% extends "layout/centered.html" %} {% load static %}
+
+<!-- TODO: Add stylesheet links. -->
+
+{% block title %}Life{% endblock title %} {% block styles %}
+<link rel="stylesheet" href="{% static 'style/grid.css' %}" />
+<link rel="stylesheet" href="{% static 'style/input.css' %}" />
+<link rel="stylesheet" href="{% static 'style/menu.css' %}" />
+{% endblock styles %}
+
+<!-- Main page content -->
+{% block body %}
+
+<h1 id="life-title">Conway's Game of LIFE</h1>
+<hr />
+
+<a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">
+  <h3>From Wikipedia</h3>
+</a>
+<p>
+  The Game of Life, also known simply as Life, is a cellular automaton devised
+  by the British mathematician John Horton Conway in 1970. It is a zero-player
+  game, meaning that its evolution is determined by its initial state, requiring
+  no further input. One interacts with the Game of Life by creating an initial
+  configuration and observing how it evolves. It is Turing complete and can
+  simulate a universal constructor or any other Turing machine.
+</p>
+<p>
+  The universe of the Game of Life is an infinite, two-dimensional orthogonal
+  grid of square cells, each of which is in one of two possible states, live or
+  dead (or populated and unpopulated, respectively). Every cell interacts with
+  its eight neighbours, which are the cells that are horizontally, vertically,
+  or diagonally adjacent. At each step in time, the following transitions occur:
+</p>
+<ul>
+  <li>
+    <strong
+      >Any <em>live</em> cell with <em>fewer than two</em> live neighbours
+      dies</strong
+    >, as if by underpopulation.
+  </li>
+  <li>
+    <strong
+      >Any <em>live</em> cell with <em>two or three</em> live neighbours lives
+      on</strong
+    >
+    to the next generation.
+  </li>
+  <li>
+    <strong
+      >Any <em>live</em> cell with <em>more than three</em> live neighbours
+      dies</strong
+    >, as if by overpopulation.
+  </li>
+  <li>
+    <strong
+      >Any <em>dead</em> cell with <em>exactly three</em> live neighbours
+      becomes a live cell</strong
+    >, as if by reproduction.
+  </li>
+</ul>
+<p>
+  These rules, which compare the behavior of the automaton to real life, can be
+  condensed into the following:
+</p>
+<ul>
+  <li>
+    <strong>Any live cell with two or three live neighbours survives.</strong>
+  </li>
+  <li>
+    <strong
+      >Any dead cell with three live neighbours becomes a live cell.</strong
+    >
+  </li>
+  <li><strong>All other live cells die in the next generation.</strong></li>
+  <li>Similarly, all other dead cells stay dead.</li>
+</ul>
+<p>
+  The initial pattern constitutes the seed of the system. The first generation
+  is created by applying the above rules simultaneously to every cell in the
+  seed, live or dead; births and deaths occur simultaneously, and the discrete
+  moment at which this happens is sometimes called a tick. Each generation is a
+  pure function of the preceding one. The rules continue to be applied
+  repeatedly to create further generations.
+</p>
+<hr />
+<div id="grid-container">
+  <div id="grid-actions">
+    <div id="grid-size">
+      <label for="width">
+        Board Width:
+        <input id="width" type="number" value="150" />
+      </label>
+      <label for="height">
+        Board Height:
+        <input id="height" type="number" value="150" />
+      </label>
+      <button onclick="updateSizeAction()">Update Board Size</button>
+      <label for="borders">
+        <input
+          id="borders"
+          type="checkbox"
+          checked
+          disabled
+          onchange="updateBordersAction()"
+        />Borders
+      </label>
+      <button id="clear-board" onclick="clearBoardAction()">Clear Board</button>
+    </div>
+
+    <br />
+
+    <div id="grid-colors">
+      <label for="cell-color">
+        Cell Color:
+        <input
+          id="cell-color"
+          type="color"
+          value="#32cd32"
+          onchange="updateCellColorAction()"
+        />
+      </label>
+      <label for="background-color">
+        Background Color:
+        <input
+          id="background-color"
+          type="color"
+          value="#d3d3d3"
+          onchange="updateBackgroundColorAction()"
+        />
+      </label>
+    </div>
+
+    <br />
+
+    <div id="grid-library">
+      <label for="pattern-name">
+        Pattern Name:
+        <input id="pattern-name" type="text" />
+      </label>
+      <button onclick="savePatternAction()">Save Current Board</button>
+      <label for="pattern-menu">
+        Saved Patterns:
+        <select
+          id="pattern-menu"
+          onfocus="getPatternsAction()"
+          onchange="loadPatternAction()"
+        >
+          <option disabled selected value="">No patterns available</option>
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <div id="game-buttons">
+    <button onclick="backAction()">&lt;&lt;&lt;</button>
+    <button onclick="tickAction()">&gt;&gt;&gt;</button>
+    <input id="speed-slider" type="range" max="10" onchange="playAction()" />
+    <button id="play" onclick="playAction()">PLAY</button>
+    <button id="stop" onclick="stopAction()">STOP</button>
+  </div>
+
+  <div id="game-stats">
+    Generation: <span id="gen-counter" onclick="editGenerationAction()">0</span>
+    <input
+      hidden
+      type="number"
+      id="gen-input"
+      onblur="INPUT.hideGenerationInput()"
+      onchange="setGenerationAction()"
+    />
+    <br />
+    Population: <span id="pop-counter">0</span>
+  </div>
+  <div id="grid-wrapper">
+    <div id="grid-frame"></div>
+  </div>
+</div>
+
+<hr />
+<h1 id="menu-header">Select a Pattern</h1>
+<div id="menu-wrapper">
+  <div id="menu-root"></div>
+</div>
+
+<script src="{% static 'scripts/points.js' %}"></script>
+<script src="{% static 'scripts/game.js' %}"></script>
+<script src="{% static 'scripts/grid.js' %}"></script>
+<script src="{% static 'scripts/board.js' %}"></script>
+<script src="{% static 'scripts/api.js' %}"></script>
+<script src="{% static 'scripts/input.js' %}"></script>
+<script src="{% static 'scripts/menu.js' %}"></script>
+
+<script type="text/javascript">
+  const INPUT = new InputHandler();
+  const gridFrame = document.getElementById("grid-frame");
+  console.log(gridFrame);
+  const GAME = new PlayableBoard(
+    {
+      size: INPUT.size,
+      colors: INPUT.colors,
+      borders: INPUT.borders,
+      editable: true,
+    },
+    gridFrame,
+  );
+  // TODO: Make event handlers direct parameters of `GAME`
+  resetCellEventHandlers();
+
+  const MENU = new PatternMenu(document.getElementById("menu-root"), [
+    {
+      name: "r-pent",
+      points: [point(0, 0), point(0, 1), point(1, 1), point(1, 2), point(2, 1)],
+    },
+  ]);
+  MENU.onPatternSelected = (pattern) => setPreviewPattern(pattern);
+
+  getPatternsAction();
+
+  // User Actions
+
+  // TODO: Implement modes!!!
+  let mode = "DEFAULT";
+
+  // Keystroke handler
+  const { ESCAPE, SPACE, LEFT, UP, RIGHT, DOWN } = INPUT.keyCodes;
+  const KEYSTROKE_HANDLERS = {
+    DEFAULT: {
+      [ESCAPE]: (event) => resetCellEventHandlers(),
+      [SPACE]: (event) => {
+        event.preventDefault();
+        GAME.isRunning ? stopAction() : playAction();
+      },
+      [LEFT]: (event) => {
+        event.preventDefault();
+        backAction();
+      },
+      [RIGHT]: (event) => {
+        event.preventDefault();
+        tickAction();
+      },
+      [UP]: (event) => {
+        if (GAME.isRunning) {
+          event.preventDefault();
+          INPUT.speedSlider.stepUp();
+          playAction();
+        }
+      },
+      [DOWN]: (event) => {
+        if (GAME.isRunning) {
+          event.preventDefault();
+          INPUT.speedSlider.stepDown();
+          playAction();
+        }
+      },
+    },
+  };
+
+  window.onkeydown = function (keyboardEvent) {
+    // TODO: Better way to distinguish 'active' element of page
+    if (keyboardEvent.target === document.body) {
+      const keystrokeHandler = KEYSTROKE_HANDLERS[mode][keyboardEvent.keyCode];
+      keystrokeHandler(keyboardEvent);
+    }
+  };
+
+  let screenLock = null;
+
+  const acquireWakeLock = async () => {
+    try {
+      screenLock = await navigator.wakeLock.request("screen");
+    } catch (err) {
+      console.log("Wake lock request failed:", err);
+    }
+  };
+
+  const releaseWakeLock = () => {
+    if (screenLock) {
+      screenLock.release();
+      screenLock = null;
+    }
+  };
+
+  function playAction() {
+    acquireWakeLock();
+    GAME.play(INPUT.tickDelay, () => tickAction());
+  }
+
+  function stopAction() {
+    GAME.stop();
+    releaseWakeLock();
+  }
+
+  function tickAction() {
+    const changes = GAME.tick();
+    INPUT.generationCount += 1;
+    INPUT.populationCount = GAME.population;
+  }
+
+  function backAction() {
+    const changes = GAME.back();
+    if (changes instanceof Points) {
+      // Natural generation
+      INPUT.generationCount -= 1;
+    }
+    INPUT.populationCount = GAME.population;
+  }
+
+  function editGenerationAction() {
+    INPUT.showGenerationInput();
+  }
+
+  function setGenerationAction() {
+    INPUT.hideGenerationInput();
+    const target = parseInt(INPUT.generationInput.value);
+    while (INPUT.generationCount !== target) {
+      INPUT.generationCount < target ? tickAction() : backAction();
+    }
+  }
+
+  function clearBoardAction() {
+    GAME.clear();
+    INPUT.populationCount = 0;
+    INPUT.generationCount = 0;
+  }
+
+  function updateSizeAction() {
+    // FIXME
+    GAME.size = INPUT.size;
+    resetCellEventHandlers();
+  }
+
+  function updateBordersAction() {
+    // FIXME
+    GAME.borders = INPUT.borders;
+  }
+
+  function updateCellColorAction() {
+    const color = INPUT.cellColor;
+    GAME.setCellColor(color);
+    MENU.updateCellColor(color);
+  }
+
+  function updateBackgroundColorAction() {
+    const color = INPUT.backgroundColor;
+    GAME.setBackgroundColor(color);
+    MENU.updateBackgroundColor(color);
+  }
+
+  function getPatternsAction() {
+    apiGetAllPatterns().then((patterns) => {
+      patterns.forEach((pattern) => MENU.addPattern(pattern));
+    });
+  }
+
+  function savePatternAction() {
+    const { name, creator, points } = INPUT.validatePattern(GAME);
+    apiSavePattern(name, creator, points)
+      .then((pattern) => MENU.addPattern(pattern))
+      .catch((error) =>
+        console.error(`Unable to save pattern ${name}. `, error),
+      );
+  }
+
+  // Click/hover handler functions
+
+  function setPreviewPattern(pattern) {
+    const { points } = pattern;
+    const handlers = previewPatternHandlers(points);
+    GAME.setCellEventHandlers(handlers);
+  }
+
+  function previewPatternHandlers(points) {
+    return {
+      onClick: (x, y) => (event) => {
+        addPattern(points, x, y);
+        if (!event.shiftKey) {
+          resetCellEventHandlers();
+        }
+      },
+      onMouseOver: (x, y) => () => {
+        GAME.previewPattern(points, x, y, true);
+      },
+      onMouseOut: (x, y) => () => {
+        GAME.previewPattern(points, x, y, false);
+      },
+    };
+  }
+
+  function addPattern(pattern, x, y) {
+    const newCells = GAME.addPattern(pattern, x, y);
+    INPUT.populationCount += newCells.length;
+  }
+
+  function resetCellEventHandlers() {
+    GAME.setCellEventHandlers({
+      onClick: (x, y) => () => {
+        toggleCell({ x, y });
+      },
+    });
+    GAME._forEach((p) => GAME._grid.setOpacity(p, 1.0));
+  }
+
+  function toggleCell(p) {
+    INPUT.populationCount += GAME.toggleCell(p);
+  }
+</script>
+{% endblock body %}

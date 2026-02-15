@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     {% load static %}
@@ -15,6 +15,7 @@
   </head>
 
   <body>
+    {% block body %}
     <header>
       {% block header %}
 
@@ -34,6 +35,7 @@
         {% block nav %}
         <ul>
           <li><a href="{% url 'index' %}">Home</a></li>
+          <li><a href="{% url 'life:index' %}">Life</a></li>
         </ul>
       </nav>
       {% endblock nav %} {% endblock header %}
@@ -58,11 +60,15 @@
 
     <footer>
       {% block footer %}
-      <p>&copy; 2024 The Alex Freeman</p>
+      <span id="copyright">
+        {% block copyright %}
+        <p>&copy; 2024 The Alex Freeman</p>
+        {% endblock copyright %}
+      </span>
       {% endblock footer %}
     </footer>
 
     <script src="{% static 'scripts/base.js' %}"></script>
-    {% block scripts %} {% endblock scripts %}
+    {% block scripts %} {% endblock scripts %} {% endblock body %}
   </body>
 </html>
