@@ -17,7 +17,7 @@ class Game {
   get borders() {
     return this._borders;
   }
-  set borders(value = false) {
+  set borders(value = true) {
     this._borders = value;
     this._crossBorders = value
       ? (points) => points.filter((p) => this._includes(p))
@@ -129,16 +129,41 @@ class Game {
   }
 
   _needsUpdate(point) {
-    const liveNeighbors = this._liveNeighbors(point);
-    const liveNeighborCount = liveNeighbors.length;
-    if (liveNeighborCount < 2) {
-      this._relevantCells.remove(point);
+    let liveNeighborsCount = 0;
+    const map = this._liveCells._map;
+    const ys1 = map.get(point.x - 1);
+    for (let y of [point.y - 1, point.y, point.y + 1]) {
+      if (ys1?.has(y)) {
+        liveNeighborsCount++;
+      }
     }
-
-    // This is where the magic happens!
-    if (this.hasCell(point))
-      return liveNeighborCount < 2 || liveNeighborCount > 3;
-    return liveNeighborCount === 3;
+    const ys2 = map.get(point.x);
+    const hasPt = ys2?.has(point.y);
+    for (let y of [point.y - 1, point.y + 1]) {
+      if (ys2?.has(y)) {
+        liveNeighborsCount++;
+      }
+      if (liveNeighborsCount > 3) {
+        return hasPt;
+      }
+    }
+    const ys3 = map.get(point.x + 1);
+    for (let y of [point.y - 1, point.y, point.y + 1]) {
+      if (ys3?.has(y)) {
+        liveNeighborsCount++;
+      }
+      if (liveNeighborsCount > 3) {
+        return hasPt;
+      }
+    }
+    if (liveNeighborsCount === 3) {
+      return !hasPt;
+    }
+    if (liveNeighborsCount === 2) {
+      return false;
+    }
+    this._relevantCells.remove(point);
+    return hasPt;
   }
 
   _nextColor([c1, c2, c3]) {

@@ -55,7 +55,7 @@ class Grid {
         };
   }
 
-  setBorders(value = false) {
+  setBorders(value = true) {
     const borderStyle = value ? "1px solid black" : "1px dashed gray";
     this._setBordersTopBottom(borderStyle);
     this._setBordersLeftRight(borderStyle);

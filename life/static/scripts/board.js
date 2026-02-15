@@ -43,7 +43,7 @@ class GameBoard {
   get borders() {
     return this._game.borders;
   }
-  set borders(value = false) {
+  set borders(value = true) {
     this._game.borders = value;
     this._grid.setBorders(value);
   }

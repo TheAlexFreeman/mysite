@@ -100,6 +100,8 @@
         <input
           id="borders"
           type="checkbox"
+          checked
+          disabled
           onchange="updateBordersAction()"
         />Borders
       </label>
@@ -262,12 +264,31 @@
     }
   };
 
+  let screenLock = null;
+
+  const acquireWakeLock = async () => {
+    try {
+      screenLock = await navigator.wakeLock.request("screen");
+    } catch (err) {
+      console.log("Wake lock request failed:", err);
+    }
+  };
+
+  const releaseWakeLock = () => {
+    if (screenLock) {
+      screenLock.release();
+      screenLock = null;
+    }
+  };
+
   function playAction() {
+    acquireWakeLock();
     GAME.play(INPUT.tickDelay, () => tickAction());
   }
 
   function stopAction() {
     GAME.stop();
+    releaseWakeLock();
   }
 
   function tickAction() {
