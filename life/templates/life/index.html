@@ -243,7 +243,7 @@
     // TODO: Better way to distinguish 'active' element of page
     if (keyboardEvent.target === document.body) {
       const keystrokeHandler = KEYSTROKE_HANDLERS[mode][keyboardEvent.keyCode];
-      keystrokeHandler(keyboardEvent);
+      keystrokeHandler?.(keyboardEvent);
     }
   };
 

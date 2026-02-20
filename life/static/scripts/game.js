@@ -129,11 +129,15 @@ class Game {
   }
 
   get changes() {
-    const changes = [];
+    const changes = { on: [], off: [] };
     this._relevantCells.forEach((point) => {
       const change = this.getChange(point);
       if (change) {
-        changes.push({ point, change });
+        if (change instanceof Array) {
+          changes.on.push({ point, change });
+        } else {
+          changes.off.push(point);
+        }
       }
     });
     return changes;

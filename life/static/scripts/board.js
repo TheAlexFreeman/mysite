@@ -137,22 +137,21 @@ class GameBoard {
   }
 
   tick() {
-    const changes = this._game.changes;
-    console.log(changes);
-    changes.forEach(({ point, change }) => {
+    const { on, off } = this._game.changes;
+    on.forEach(({ point, change }) => {
+      const colors = change.map((p) => this._grid.getColor(p));
+      this._grid.setColor(point, this._nextColor(colors));
       this._game.toggleCell(point);
-      if (change instanceof Array) {
-        const colors = change.map((p) => this._grid.getColor(p));
-        this._grid.setColor(point, this._nextColor(colors));
-      } else {
-        this._grid.setColor(point, this.colors.off);
-      }
     });
-    return changes;
+    off.forEach((point) => {
+      this._grid.setColor(point, this.colors.off);
+      this._game.toggleCell(point);
+    });
+    return { on, off };
   }
 
   _nextColor([c1, c2, c3] = ["limegreen", "limegreen", "limegreen"]) {
-    // console.log(c1, c2, c3);
+    console.log(c1, c2, c3);
     return "limegreen";
   }
 
