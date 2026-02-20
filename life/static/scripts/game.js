@@ -128,6 +128,56 @@ class Game {
     return this._relevantCells.filter((p) => this._needsUpdate(p));
   }
 
+  get changes() {
+    const changes = [];
+    this._relevantCells.forEach((point) => {
+      const change = this.getChange(point);
+      if (change) {
+        changes.push({ point, change });
+      }
+    });
+    return changes;
+  }
+
+  getChange(point) {
+    const liveNeighbors = [];
+    const map = this._liveCells._map;
+    const ys1 = map.get(point.x - 1);
+    for (let y of [point.y - 1, point.y, point.y + 1]) {
+      if (ys1?.has(y)) {
+        liveNeighbors.push({ x: point.x - 1, y });
+      }
+    }
+    const ys2 = map.get(point.x);
+    const hasPt = ys2?.has(point.y);
+    for (let y of [point.y - 1, point.y + 1]) {
+      if (ys2?.has(y)) {
+        liveNeighbors.push({ x: point.x, y });
+      }
+      if (liveNeighbors.length > 3) {
+        return hasPt;
+      }
+    }
+    const ys3 = map.get(point.x + 1);
+    for (let y of [point.y - 1, point.y, point.y + 1]) {
+      if (ys3?.has(y)) {
+        liveNeighbors.push({ x: point.x + 1, y });
+      }
+      if (liveNeighbors.length > 3) {
+        return hasPt;
+      }
+    }
+    const liveNeighborsCount = liveNeighbors.length;
+    if (liveNeighborsCount === 3) {
+      return hasPt ? false : liveNeighbors;
+    }
+    if (liveNeighborsCount === 2) {
+      return false;
+    }
+    this._relevantCells.remove(point);
+    return hasPt;
+  }
+
   _needsUpdate(point) {
     let liveNeighborsCount = 0;
     const map = this._liveCells._map;
