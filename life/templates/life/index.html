@@ -253,7 +253,7 @@
     try {
       screenLock = await navigator.wakeLock.request("screen");
     } catch (err) {
-      console.log("Wake lock request failed:", err);
+      console.error("Wake lock request failed:", err);
     }
   };
 

@@ -220,11 +220,6 @@ class Game {
     return hasPt;
   }
 
-  _nextColor([c1, c2, c3]) {
-    // TODO: Allow for different kinds of 'inheritance' to determine cell color
-    return "limegreen";
-  }
-
   _liveNeighbors(point) {
     return this._neighbors(point).filter((p) => this.hasCell(p));
   }
