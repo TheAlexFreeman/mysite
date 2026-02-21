@@ -140,6 +140,21 @@ class GameBoard {
     const changes = this._game.tick();
     changes.forEach((p) => this._correctColor(p));
     return changes;
+    // const { on, off } = this._game.changes;
+    // on.forEach(({ point, change }) => {
+    //   const colors = change.map((p) => this._grid.getColor(p));
+    //   this._grid.setColor(point, this._nextColor(colors));
+    //   this._game.toggleCell(point);
+    // });
+    // off.forEach((point) => {
+    //   this._grid.setColor(point, this.colors.off);
+    //   this._game.toggleCell(point);
+    // });
+    // return { on, off };
+  }
+
+  _nextColor([c1, c2, c3] = ["limegreen", "limegreen", "limegreen"]) {
+    return "limegreen";
   }
 
   _correctColor(p) {

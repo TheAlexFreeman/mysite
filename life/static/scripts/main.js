@@ -1,6 +1,5 @@
 const INPUT = new InputHandler();
 const gridFrame = document.getElementById("grid-frame");
-console.log(gridFrame);
 const GAME = new GameBoard(
   {
     size: INPUT.size,
