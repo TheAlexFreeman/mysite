@@ -2,14 +2,14 @@
 
 <!-- TODO: Add stylesheet links. -->
 
-{% block title %}Life{% endblock title %} {% block styles %}
+{% block title %}Life{% endblock title %} {% block styles %} {{ block.super}}
 <link rel="stylesheet" href="{% static 'life/style/grid.css' %}" />
 <link rel="stylesheet" href="{% static 'life/style/input.css' %}" />
 <link rel="stylesheet" href="{% static 'life/style/menu.css' %}" />
 {% endblock styles %}
 
 <!-- Main page content -->
-{% block body %} {% block content %}
+{% block content %}
 
 <h1 id="life-title">Conway's Game of LIFE</h1>
 <hr />
@@ -165,8 +165,7 @@
   <div id="menu-root"></div>
 </div>
 
-{% endblock content %}
-
+{% endblock content %} {% block scripts %}
 <script src="{% static 'life/scripts/points.js' %}"></script>
 <script src="{% static 'life/scripts/game.js' %}"></script>
 <script src="{% static 'life/scripts/grid.js' %}"></script>
@@ -390,4 +389,4 @@
     INPUT.populationCount += GAME.toggleCell(p);
   }
 </script>
-{% endblock body %}
+{% endblock scripts %}

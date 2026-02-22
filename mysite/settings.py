@@ -148,7 +148,7 @@ USE_TZ = True
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "base", "static")]
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, "base", "static")]
 
 STORAGES = {
     # Enable WhiteNoise's GZip and Brotli compression of static assets:
@@ -165,8 +165,23 @@ STORAGES = {
 
 # Skip compressing SVGs - they compress poorly and Django admin GIS SVGs can trigger race conditions.
 WHITENOISE_SKIP_COMPRESS_EXTENSIONS = (
-    "jpg", "jpeg", "png", "gif", "webp", "zip", "gz", "tgz", "bz2", "tbz", "xz",
-    "br", "swf", "flv", "woff", "woff2", "svg",
+    "jpg",
+    "jpeg",
+    "png",
+    "gif",
+    "webp",
+    "zip",
+    "gz",
+    "tgz",
+    "bz2",
+    "tbz",
+    "xz",
+    "br",
+    "swf",
+    "flv",
+    "woff",
+    "woff2",
+    "svg",
 )
 
 
