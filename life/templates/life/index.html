@@ -3,13 +3,13 @@
 <!-- TODO: Add stylesheet links. -->
 
 {% block title %}Life{% endblock title %} {% block styles %}
-<link rel="stylesheet" href="{% static 'style/grid.css' %}" />
-<link rel="stylesheet" href="{% static 'style/input.css' %}" />
-<link rel="stylesheet" href="{% static 'style/menu.css' %}" />
+<link rel="stylesheet" href="{% static 'life/style/grid.css' %}" />
+<link rel="stylesheet" href="{% static 'life/style/input.css' %}" />
+<link rel="stylesheet" href="{% static 'life/style/menu.css' %}" />
 {% endblock styles %}
 
 <!-- Main page content -->
-{% block body %}
+{% block body %} {% block content %}
 
 <h1 id="life-title">Conway's Game of LIFE</h1>
 <hr />
@@ -165,13 +165,15 @@
   <div id="menu-root"></div>
 </div>
 
-<script src="{% static 'scripts/points.js' %}"></script>
-<script src="{% static 'scripts/game.js' %}"></script>
-<script src="{% static 'scripts/grid.js' %}"></script>
-<script src="{% static 'scripts/board.js' %}"></script>
-<script src="{% static 'scripts/api.js' %}"></script>
-<script src="{% static 'scripts/input.js' %}"></script>
-<script src="{% static 'scripts/menu.js' %}"></script>
+{% endblock content %}
+
+<script src="{% static 'life/scripts/points.js' %}"></script>
+<script src="{% static 'life/scripts/game.js' %}"></script>
+<script src="{% static 'life/scripts/grid.js' %}"></script>
+<script src="{% static 'life/scripts/board.js' %}"></script>
+<script src="{% static 'life/scripts/api.js' %}"></script>
+<script src="{% static 'life/scripts/input.js' %}"></script>
+<script src="{% static 'life/scripts/menu.js' %}"></script>
 
 <script type="text/javascript">
   const INPUT = new InputHandler();

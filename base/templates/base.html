@@ -5,7 +5,7 @@
 
     <meta charset="UTF-8" />
 
-    <link rel="stylesheet" href="{% static 'style/base.css' %}" />
+    <link rel="stylesheet" href="{% static 'base/style/base.css' %}" />
     {% block styles %} {% endblock styles %}
 
     <!-- Favicon -->
@@ -13,21 +13,21 @@
     <link
       rel="apple-touch-icon"
       sizes="180x180"
-      href="{% static 'favicon/apple-touch-icon.png' %}"
+      href="{% static 'base/favicon/apple-touch-icon.png' %}"
     />
     <link
       rel="icon"
       type="image/png"
       sizes="32x32"
-      href="{% static 'favicon/favicon-32x32.png' %}"
+      href="{% static 'base/favicon/favicon-32x32.png' %}"
     />
     <link
       rel="icon"
       type="image/png"
       sizes="16x16"
-      href="{% static 'favicon/favicon-16x16.png' %}"
+      href="{% static 'base/favicon/favicon-16x16.png' %}"
     />
-    <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}" />
+    <link rel="manifest" href="{% static 'base/favicon/site.webmanifest' %}" />
     {% endblock favicon %}
 
     <meta name="theme-color" content="#4e49d1" />
@@ -42,7 +42,10 @@
       {% block header %}
 
       <div id="image-and-name">
-        <img src="{% static 'images/NarcissusInverted.jpg' %}" alt="Logo" />
+        <img
+          src="{% static 'base/images/NarcissusInverted.jpg' %}"
+          alt="Logo"
+        />
         <div>
           <h1 id="pagename">
             {% block pagename %}The Alex Freeman{% endblock pagename %}
@@ -69,7 +72,10 @@
 
     <div id="banner">
       {% block bannerimage %}
-      <img src="{% static 'images/IslayHillSunrise-scaled.jpg' %}" alt="Logo" />
+      <img
+        src="{% static 'base/images/IslayHillSunrise-scaled.jpg' %}"
+        alt="Logo"
+      />
       {% endblock bannerimage %}
       <caption>
         <p class="caption">
@@ -90,7 +96,7 @@
       {% endblock footer %}
     </footer>
 
-    <script src="{% static 'scripts/base.js' %}"></script>
+    <script src="{% static 'base/scripts/base.js' %}"></script>
     {% block scripts %} {% endblock scripts %} {% endblock body %}
   </body>
 </html>

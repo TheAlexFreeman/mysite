@@ -160,7 +160,14 @@ STORAGES = {
 
 # Don't store the original (un-hashed filename) version of static files, to reduce slug size:
 # https://whitenoise.readthedocs.io/en/latest/django.html#WHITENOISE_KEEP_ONLY_HASHED_FILES
-WHITENOISE_KEEP_ONLY_HASHED_FILES = True
+# Disabled: can cause FileNotFoundError during parallel compression on Windows (race with file deletion).
+# WHITENOISE_KEEP_ONLY_HASHED_FILES = True
+
+# Skip compressing SVGs - they compress poorly and Django admin GIS SVGs can trigger race conditions.
+WHITENOISE_SKIP_COMPRESS_EXTENSIONS = (
+    "jpg", "jpeg", "png", "gif", "webp", "zip", "gz", "tgz", "bz2", "tbz", "xz",
+    "br", "swf", "flv", "woff", "woff2", "svg",
+)
 
 
 # Default primary key field type
