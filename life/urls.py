@@ -8,4 +8,5 @@ app_name = "life"
 
 urlpatterns = [
     path("", views.index, name="index"),
+    path("api/catalog/", views.pattern_catalog, name="pattern_catalog"),
 ]

@@ -134,9 +134,11 @@ function updateBackgroundColorAction() {
 }
 
 function getPatternsAction() {
-  // apiGetAllPatterns().then((patterns) => {
-  //   patterns.forEach((pattern) => MENU.addPattern(pattern));
-  // });
+  apiGetPatternCatalog()
+    .then((patterns) => {
+      patterns.forEach((pattern) => MENU.addPattern(pattern));
+    })
+    .catch((error) => console.error("Unable to load pattern catalog.", error));
 }
 
 function savePatternAction() {

@@ -46,6 +46,14 @@ td.pattern-name {
   width: 200px;
 }
 
+td.pattern-description {
+  min-width: 320px;
+  white-space: normal;
+  line-height: 1.4;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
 .preview-grid-frame {
   display: inline-block;
   cursor: pointer;

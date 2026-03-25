@@ -66,7 +66,9 @@ class PatternMenu {
       this._createPreviewControls(this._patterns[this._patterns.length - 1]),
     );
     row.appendChild(controlCell);
-    row.appendChild(createElement("td", "pattern-description"));
+    row.appendChild(
+      createElement("td", "pattern-description", pattern.description || ""),
+    );
     this._menu.appendChild(row);
   }
 

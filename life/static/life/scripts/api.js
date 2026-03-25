@@ -1,4 +1,9 @@
 const lifeUri = "api/Patterns";
+const catalogUri = "api/catalog/";
+
+function apiGetPatternCatalog() {
+  return _apiFetch(catalogUri);
+}
 
 function apiGetAllPatterns() {
   return _apiFetch(lifeUri);
