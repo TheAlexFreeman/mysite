@@ -189,7 +189,7 @@ class PatternMenu {
     flipVertical.onclick = () => game.flip(true);
 
     const flipHorizontal = createElement("a", "flip-button", "↔");
-    flipHorizontal.title = "FlipHorizontally";
+    flipHorizontal.title = "Flip Horizontally";
     flipHorizontal.onclick = () => game.flip(false);
 
     controlPanel.append(rotateLeft, rotateRight, flipVertical, flipHorizontal);

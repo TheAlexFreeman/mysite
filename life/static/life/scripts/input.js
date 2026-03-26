@@ -127,7 +127,7 @@ class InputHandler {
   validatePattern(grid) {
     if (grid.isEmpty) return window.alert("Pattern cannot be empty.");
     const name = this.patternName;
-    const creator = this.creatorName || "Anonymouse";
+    const creator = this.creatorName || "Anonymous";
     if (!name) return window.alert("Pattern must have a name.");
     return { name, creator, points: grid.normalizedPattern };
   }

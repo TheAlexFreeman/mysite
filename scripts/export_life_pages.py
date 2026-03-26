@@ -94,9 +94,7 @@ def _render_index_html(content_html: str, inline_script: str) -> str:
 
             <div id="banner">
               <img src="./static/base/images/IslayHillSunrise-scaled.jpg" alt="Sunrise banner" />
-              <caption>
-                <p class="caption">Conway's Game of Life</p>
-              </caption>
+              <p class="caption">Conway's Game of Life</p>
             </div>
 
             <main>
