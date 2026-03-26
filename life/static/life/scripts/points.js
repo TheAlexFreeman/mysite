@@ -18,13 +18,11 @@ const ORIGIN = { x: 0, y: 0 };
 
 class Points {
   _map = new Map();
+  _size = 0;
 
   constructor(...points) {
     for (let { x, y } of points) {
-      if (!this._map.has(x)) {
-        this._map.set(x, new Set());
-      }
-      this._map.get(x).add(y);
+      this.add({ x, y });
     }
   }
 
@@ -33,11 +31,7 @@ class Points {
   }
 
   get size() {
-    let result = 0;
-    for (let [_, ys] of this._map) {
-      result += ys.size;
-    }
-    return result;
+    return this._size;
   }
 
   get list() {
@@ -54,18 +48,29 @@ class Points {
     if (!this._map.has(x)) {
       this._map.set(x, new Set());
     }
-    this._map.get(x).add(y);
+    const row = this._map.get(x);
+    if (!row.has(y)) {
+      row.add(y);
+      this._size++;
+    }
   }
 
   remove(p = ORIGIN) {
     const { x, y } = p;
     if (this._map.has(x)) {
-      this._map.get(x).delete(y);
+      const row = this._map.get(x);
+      if (row.delete(y)) {
+        this._size--;
+      }
+      if (!row.size) {
+        this._map.delete(x);
+      }
     }
   }
 
   clear() {
     this._map.clear();
+    this._size = 0;
   }
 
   forEach(action = ({ x, y }) => {}) {
@@ -161,7 +166,12 @@ class Points {
     const result = new Points();
     for (let [x, ys] of this._map) {
       if (ys.size) {
-        result._map.set(x - min.x, new Set([...ys].map((y) => y - min.y)));
+        const resultYs = new Set();
+        for (let y of ys) {
+          resultYs.add(y - min.y);
+        }
+        result._map.set(x - min.x, resultYs);
+        result._size += resultYs.size;
       }
     }
     return result;
@@ -198,6 +208,7 @@ class Points {
     for (let [x, ys] of this._map) {
       if (ys.size) {
         result._map.set(x, new Set(ys));
+        result._size += ys.size;
       }
     }
     return result;
@@ -244,10 +255,14 @@ class Points {
       if (this._map.has(x)) {
         const row = this._map.get(x);
         for (let y of ys) {
-          row.add(y);
+          if (!row.has(y)) {
+            row.add(y);
+            this._size++;
+          }
         }
       } else {
-        this._map.set(x, ys);
+        this._map.set(x, new Set(ys));
+        this._size += ys.size;
       }
     }
   }

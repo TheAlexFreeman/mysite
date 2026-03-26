@@ -7,9 +7,11 @@ function createElement(tagName, className) {
 class Grid {
   _grid = [];
   root;
+  _cellHandlers = null;
 
   constructor(frame, settings, cells = []) {
     this.root = this._createGrid(settings, cells);
+    this._bindDelegatedCellEvents();
     frame.appendChild(this.root);
   }
 
@@ -39,20 +41,8 @@ class Grid {
     this.root.onclick = onClick;
   }
 
-  setCellEventHandlers(x = 0, y = 0, handlers) {
-    const { onClick, onMouseOver, onMouseOut } = handlers;
-    const cell = this._grid[x][y];
-    cell.onclick = onClick(x, y);
-    cell.onmouseover = onMouseOver
-      ? onMouseOver(x, y)
-      : () => {
-          cell.style.opacity = 0.5;
-        };
-    cell.onmouseout = onMouseOut
-      ? onMouseOut(x, y)
-      : () => {
-          cell.style.opacity = 1.0;
-        };
+  setCellEventHandlers(handlers) {
+    this._cellHandlers = handlers;
   }
 
   setBorders(value = true) {
@@ -78,31 +68,79 @@ class Grid {
     }
   }
 
+  _bindDelegatedCellEvents() {
+    const getCell = (event) => event.target.closest(".cell");
+
+    this.root.onclick = (event) => {
+      const cell = getCell(event);
+      if (!cell || !this.root.contains(cell)) return;
+      const { onClick } = this._cellHandlers || {};
+      if (!onClick) return;
+      const x = Number(cell.dataset.x);
+      const y = Number(cell.dataset.y);
+      onClick(x, y)(event);
+    };
+
+    this.root.onmouseover = (event) => {
+      const cell = getCell(event);
+      if (!cell || !this.root.contains(cell)) return;
+      const { onMouseOver } = this._cellHandlers || {};
+      if (onMouseOver) {
+        const x = Number(cell.dataset.x);
+        const y = Number(cell.dataset.y);
+        onMouseOver(x, y)(event);
+      } else {
+        cell.style.opacity = 0.5;
+      }
+    };
+
+    this.root.onmouseout = (event) => {
+      const cell = getCell(event);
+      if (!cell || !this.root.contains(cell)) return;
+      const { onMouseOut } = this._cellHandlers || {};
+      if (onMouseOut) {
+        const x = Number(cell.dataset.x);
+        const y = Number(cell.dataset.y);
+        onMouseOut(x, y)(event);
+      } else {
+        cell.style.opacity = 1.0;
+      }
+    };
+  }
+
+  _cellLookup(cells = []) {
+    const lookup = new Map();
+    for (let { x, y } of cells) {
+      if (!lookup.has(x)) {
+        lookup.set(x, new Set());
+      }
+      lookup.get(x).add(y);
+    }
+    return lookup;
+  }
+
   // Grid construction methods
 
   _createGrid(settings, cells) {
     const { size, colors, borders } = settings;
     const gridElement = createElement("div", "grid");
+    const cellLookup = this._cellLookup(cells);
     for (let x = 0; x < size.x; x++) {
-      gridElement.appendChild(
-        this._createRow(
-          x,
-          size.y,
-          colors,
-          cells.filter((p) => p.x === x),
-        ),
-      );
+      gridElement.appendChild(this._createRow(x, size.y, colors, cellLookup));
     }
     this.setBorders(borders);
     return gridElement;
   }
 
-  _createRow(x, size, colors, cells) {
+  _createRow(x, size, colors, cellLookup) {
     const row = [];
     const rowElement = createElement("div", "row");
+    const rowLookup = cellLookup.get(x);
     for (let y = 0; y < size; y++) {
       const cell = createElement("span", "cell");
-      const isAlive = cells.some((p) => p.x === x && p.y === y);
+      cell.dataset.x = x;
+      cell.dataset.y = y;
+      const isAlive = rowLookup?.has(y) || false;
       cell.style.backgroundColor = isAlive ? colors.on : colors.off;
       row.push(cell);
       rowElement.appendChild(cell);

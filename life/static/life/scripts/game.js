@@ -119,13 +119,31 @@ class Game {
   }
 
   tick() {
-    const changes = this.cellsToChange;
-    changes.forEach((p) => this.toggleCell(p));
+    const changes = this._collectChanges();
+    changes.forEach((p) => {
+      if (this.hasCell(p)) {
+        this.removeCell(p);
+      } else {
+        this.addCell(p);
+      }
+    });
     return changes;
   }
 
   get cellsToChange() {
-    return this._relevantCells.filter((p) => this._needsUpdate(p));
+    return this._collectChanges();
+  }
+
+  _collectChanges() {
+    const changes = new Points();
+    for (let [x, ys] of this._relevantCells._map) {
+      for (let y of ys) {
+        if (this._needsUpdateCoords(x, y)) {
+          changes.add({ x, y });
+        }
+      }
+    }
+    return changes;
   }
 
   get changes() {
@@ -144,34 +162,14 @@ class Game {
   }
 
   getChange(point) {
-    const liveNeighbors = [];
-    const map = this._liveCells._map;
-    const ys1 = map.get(point.x - 1);
-    for (let y of [point.y - 1, point.y, point.y + 1]) {
-      if (ys1?.has(y)) {
-        liveNeighbors.push({ x: point.x - 1, y });
-      }
+    const { hasPt, liveNeighborsCount, liveNeighbors } = this._neighborState(
+      point.x,
+      point.y,
+      true,
+    );
+    if (liveNeighborsCount > 3) {
+      return hasPt;
     }
-    const ys2 = map.get(point.x);
-    const hasPt = ys2?.has(point.y);
-    for (let y of [point.y - 1, point.y + 1]) {
-      if (ys2?.has(y)) {
-        liveNeighbors.push({ x: point.x, y });
-      }
-      if (liveNeighbors.length > 3) {
-        return hasPt;
-      }
-    }
-    const ys3 = map.get(point.x + 1);
-    for (let y of [point.y - 1, point.y, point.y + 1]) {
-      if (ys3?.has(y)) {
-        liveNeighbors.push({ x: point.x + 1, y });
-      }
-      if (liveNeighbors.length > 3) {
-        return hasPt;
-      }
-    }
-    const liveNeighborsCount = liveNeighbors.length;
     if (liveNeighborsCount === 3) {
       return hasPt ? false : liveNeighbors;
     }
@@ -183,32 +181,14 @@ class Game {
   }
 
   _needsUpdate(point) {
-    let liveNeighborsCount = 0;
-    const map = this._liveCells._map;
-    const ys1 = map.get(point.x - 1);
-    for (let y of [point.y - 1, point.y, point.y + 1]) {
-      if (ys1?.has(y)) {
-        liveNeighborsCount++;
-      }
-    }
-    const ys2 = map.get(point.x);
-    const hasPt = ys2?.has(point.y);
-    for (let y of [point.y - 1, point.y + 1]) {
-      if (ys2?.has(y)) {
-        liveNeighborsCount++;
-      }
-      if (liveNeighborsCount > 3) {
-        return hasPt;
-      }
-    }
-    const ys3 = map.get(point.x + 1);
-    for (let y of [point.y - 1, point.y, point.y + 1]) {
-      if (ys3?.has(y)) {
-        liveNeighborsCount++;
-      }
-      if (liveNeighborsCount > 3) {
-        return hasPt;
-      }
+    return this._needsUpdateCoords(point.x, point.y);
+  }
+
+  _needsUpdateCoords(x, y) {
+    const point = { x, y };
+    const { hasPt, liveNeighborsCount } = this._neighborState(x, y, false);
+    if (liveNeighborsCount > 3) {
+      return hasPt;
     }
     if (liveNeighborsCount === 3) {
       return !hasPt;
@@ -218,6 +198,39 @@ class Game {
     }
     this._relevantCells.remove(point);
     return hasPt;
+  }
+
+  _neighborState(x, y, collectNeighbors = false) {
+    const map = this._liveCells._map;
+    const liveNeighbors = collectNeighbors ? [] : null;
+    let liveNeighborsCount = 0;
+
+    const pushNeighbor = (nx, ny) => {
+      if (collectNeighbors) {
+        liveNeighbors.push({ x: nx, y: ny });
+      }
+      liveNeighborsCount++;
+    };
+
+    const ys1 = map.get(x - 1);
+    if (ys1?.has(y - 1)) pushNeighbor(x - 1, y - 1);
+    if (ys1?.has(y)) pushNeighbor(x - 1, y);
+    if (ys1?.has(y + 1)) pushNeighbor(x - 1, y + 1);
+
+    const ys2 = map.get(x);
+    const hasPt = ys2?.has(y) || false;
+    if (ys2?.has(y - 1)) pushNeighbor(x, y - 1);
+    if (ys2?.has(y + 1)) pushNeighbor(x, y + 1);
+    if (liveNeighborsCount > 3) {
+      return { hasPt, liveNeighborsCount, liveNeighbors };
+    }
+
+    const ys3 = map.get(x + 1);
+    if (ys3?.has(y - 1)) pushNeighbor(x + 1, y - 1);
+    if (ys3?.has(y)) pushNeighbor(x + 1, y);
+    if (ys3?.has(y + 1)) pushNeighbor(x + 1, y + 1);
+
+    return { hasPt, liveNeighborsCount, liveNeighbors };
   }
 
   _liveNeighbors(point) {

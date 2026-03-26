@@ -294,9 +294,7 @@ class PlayableBoard extends GameBoard {
   setCellEventHandlers(
     handlers = { onClick: (x, y) => () => this.toggleCell({ x, y }) },
   ) {
-    this._forEach(({ x, y }) =>
-      this._grid.setCellEventHandlers(x, y, handlers),
-    );
+    this._grid.setCellEventHandlers(handlers);
   }
 
   // Support for adding patterns from menu
