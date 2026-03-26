@@ -36,5 +36,19 @@ function apiSaveColorScheme(name, colors) {
 }
 
 function _apiFetch(...params) {
-  return fetch(...params).then((response) => response.json());
+  return fetch(...params).then(async (response) => {
+    if (!response.ok) {
+      let message = `Request failed with status ${response.status}`;
+      try {
+        const data = await response.json();
+        if (data?.error) {
+          message = data.error;
+        }
+      } catch {
+        // Fall back to the status-based message when the body is not JSON.
+      }
+      throw new Error(message);
+    }
+    return response.json();
+  });
 }
