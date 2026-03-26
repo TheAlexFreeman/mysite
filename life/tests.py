@@ -1,9 +1,9 @@
-from django.test import Client, TestCase
+from django.test import SimpleTestCase
 
 from .pattern_catalog import parse_life_catalog
 
 
-class PatternCatalogParserTests(TestCase):
+class PatternCatalogParserTests(SimpleTestCase):
     def test_parser_splits_aliases_and_description(self):
         catalog = parse_life_catalog(
             """
@@ -56,9 +56,9 @@ blinker ship - an object which travels while growing larger by
         )
 
 
-class PatternCatalogViewTests(TestCase):
+class PatternCatalogViewTests(SimpleTestCase):
     def test_catalog_endpoint_returns_patterns(self):
-        response = Client().get("/life/api/catalog/")
+        response = self.client.get("/life/api/catalog/")
 
         self.assertEqual(response.status_code, 200)
         payload = response.json()

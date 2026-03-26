@@ -191,6 +191,8 @@
 
   const MENU = new PatternMenu(document.getElementById("menu-root"));
   MENU.onPatternSelected = (pattern) => setPreviewPattern(pattern);
+  MENU.onRetryRequested = () => getPatternsAction();
+  getPatternsAction();
 
   // User Actions
 
@@ -323,9 +325,18 @@
   }
 
   function getPatternsAction() {
-    apiGetAllPatterns().then((patterns) => {
-      patterns.forEach((pattern) => MENU.addPattern(pattern));
-    });
+    MENU.setLoadingState();
+    apiGetPatternCatalog()
+      .then((patterns) => {
+        MENU.setPatterns(patterns);
+      })
+      .catch((error) => {
+        console.error("Unable to load pattern catalog.", error);
+        MENU.setErrorState(
+          "Pattern catalog unavailable",
+          error.message || "The menu could not load the glossary patterns.",
+        );
+      });
   }
 
   function savePatternAction() {
