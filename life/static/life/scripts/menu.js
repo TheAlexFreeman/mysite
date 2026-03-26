@@ -33,16 +33,64 @@ const SETTINGS = {
 class PatternMenu {
   _patterns = [];
   _menu = createElement("tbody", "menu-body");
+  _statusRow = null;
 
   selectedPattern = null;
   onPatternSelected = (pattern) => console.dir(pattern);
+  onRetryRequested = () => {};
 
   constructor(root, patterns = []) {
     const table = createElement("table", "menu-table");
     table.appendChild(_createTableHead());
     table.appendChild(this._menu);
-    patterns.forEach((pattern) => this.addPattern(pattern));
+    if (patterns.length) {
+      patterns.forEach((pattern) => this.addPattern(pattern));
+    } else {
+      this.setEmptyState();
+    }
     root.appendChild(table);
+  }
+
+  clear() {
+    this._patterns = [];
+    this._menu.replaceChildren();
+    this._statusRow = null;
+  }
+
+  setPatterns(patterns = []) {
+    this.clear();
+    if (!patterns.length) {
+      this.setEmptyState();
+      return;
+    }
+    patterns.forEach((pattern) => this.addPattern(pattern));
+  }
+
+  setLoadingState(
+    title = "Loading patterns",
+    detail = "Reading the Conway glossary and building previews.",
+  ) {
+    this._showState("loading", title, detail);
+  }
+
+  setErrorState(
+    title = "Unable to load patterns",
+    detail = "Try refreshing the page in a moment.",
+  ) {
+    this._showState("error", title, detail, {
+      actionLabel: "Retry loading catalog",
+      action: () => this.onRetryRequested(),
+    });
+  }
+
+  setEmptyState(
+    title = "No patterns available",
+    detail = "The Conway glossary catalog did not return any patterns.",
+  ) {
+    this._showState("empty", title, detail, {
+      secondaryDetail:
+        "Saved user patterns are separate from this glossary menu and will only appear once a save-backed catalog exists.",
+    });
   }
 
   updateCellColor(color = "limegreen") {
@@ -53,6 +101,7 @@ class PatternMenu {
   }
 
   addPattern(pattern) {
+    this._clearState();
     const row = createElement("tr", "menu-item");
 
     const nameCell = createElement("td", "pattern-name", pattern.name);
@@ -70,6 +119,47 @@ class PatternMenu {
       createElement("td", "pattern-description", pattern.description || ""),
     );
     this._menu.appendChild(row);
+  }
+
+  _clearState() {
+    if (this._statusRow) {
+      this._statusRow.remove();
+      this._statusRow = null;
+    }
+  }
+
+  _showState(kind, title, detail, options = {}) {
+    this.clear();
+    const row = createElement("tr", `menu-state-row menu-state-${kind}`);
+    const cell = createElement("td", "menu-state-cell");
+    cell.colSpan = _COLUMNS.length;
+
+    const panel = createElement("div", "menu-state-panel");
+    panel.appendChild(createElement("p", "menu-state-eyebrow", kind));
+    panel.appendChild(createElement("h3", "menu-state-title", title));
+    panel.appendChild(createElement("p", "menu-state-detail", detail));
+
+    if (options.secondaryDetail) {
+      panel.appendChild(
+        createElement("p", "menu-state-note", options.secondaryDetail),
+      );
+    }
+
+    if (options.actionLabel && typeof options.action === "function") {
+      const button = createElement(
+        "button",
+        "menu-state-action",
+        options.actionLabel,
+      );
+      button.type = "button";
+      button.onclick = options.action;
+      panel.appendChild(button);
+    }
+
+    cell.appendChild(panel);
+    row.appendChild(cell);
+    this._menu.appendChild(row);
+    this._statusRow = row;
   }
 
   _createPreviewCell(pattern) {
@@ -99,7 +189,7 @@ class PatternMenu {
     flipVertical.onclick = () => game.flip(true);
 
     const flipHorizontal = createElement("a", "flip-button", "↔");
-    flipHorizontal.title = "FlipHorizontally";
+    flipHorizontal.title = "Flip Horizontally";
     flipHorizontal.onclick = () => game.flip(false);
 
     controlPanel.append(rotateLeft, rotateRight, flipVertical, flipHorizontal);
