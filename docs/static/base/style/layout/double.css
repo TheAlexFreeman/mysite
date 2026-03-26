@@ -1,0 +1,6 @@
+section.centered {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1em;
+    padding: 0 1em;
+}
