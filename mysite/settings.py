@@ -45,6 +45,12 @@ ALLOWED_HOSTS = [
     "[::1]",
     "0.0.0.0",
     "thealexfreeman-ws.onrender.com",
+    "demo.thealexfreeman.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://demo.thealexfreeman.com",
+    "https://thealexfreeman-ws.onrender.com",
 ]
 
 
