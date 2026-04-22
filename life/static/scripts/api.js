@@ -1,7 +1,5 @@
-const LIFE_API_CONFIG = window.LIFE_API_CONFIG || {};
-const lifeUri = LIFE_API_CONFIG.lifeUri || "api/Patterns";
-const catalogUri = LIFE_API_CONFIG.catalogUri || "api/catalog/";
-const persistenceDisabled = LIFE_API_CONFIG.persistenceDisabled || false;
+const lifeUri = "api/Patterns";
+const catalogUri = "api/catalog/";
 
 function apiGetPatternCatalog() {
   return _apiFetch(catalogUri);
@@ -16,11 +14,6 @@ function apiLoadPattern(id) {
 }
 
 function apiSavePattern(name, creator, points) {
-  if (persistenceDisabled) {
-    return Promise.reject(
-      new Error("Pattern saving is disabled in the static export."),
-    );
-  }
   return _apiFetch(`${lifeUri}/`, {
     method: "POST",
     headers: {
@@ -32,11 +25,6 @@ function apiSavePattern(name, creator, points) {
 }
 
 function apiSaveColorScheme(name, colors) {
-  if (persistenceDisabled) {
-    return Promise.reject(
-      new Error("Color scheme saving is disabled in the static export."),
-    );
-  }
   return _apiFetch(`${lifeUri}/`, {
     method: "POST",
     headers: {

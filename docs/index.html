@@ -1,17 +1,52 @@
-{% extends "layout/centered.html" %} {% load static %}
+        <!doctype html>
+        <html lang="en">
+          <head>
+            <meta charset="UTF-8" />
+            <meta name="theme-color" content="#4e49d1" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<!-- TODO: Add stylesheet links. -->
+            <link rel="stylesheet" href="./static/base/style/base.css" />
+            <link rel="stylesheet" href="./static/base/style/layout/centered.css" />
+            <link rel="stylesheet" href="./static/life/style/grid.css" />
+            <link rel="stylesheet" href="./static/life/style/input.css" />
+            <link rel="stylesheet" href="./static/life/style/menu.css" />
 
-{% block title %}Life{% endblock title %} {% block styles %} {{ block.super}}
-<link rel="stylesheet" href="{% static 'life/style/grid.css' %}" />
-<link rel="stylesheet" href="{% static 'life/style/input.css' %}" />
-<link rel="stylesheet" href="{% static 'life/style/menu.css' %}" />
-{% endblock styles %}
+            <link rel="apple-touch-icon" sizes="180x180" href="./static/base/favicon/apple-touch-icon.png" />
+            <link rel="icon" type="image/png" sizes="32x32" href="./static/base/favicon/favicon-32x32.png" />
+            <link rel="icon" type="image/png" sizes="16x16" href="./static/base/favicon/favicon-16x16.png" />
+            <link rel="manifest" href="./static/base/favicon/site.webmanifest" />
 
-<!-- Main page content -->
-{% block content %}
+            <title>Life</title>
+          </head>
+          <body>
+            <header>
+              <div id="image-and-name">
+                <img src="./static/base/images/NarcissusInverted.jpg" alt="Logo" />
+                <div>
+                  <h1 id="pagename">The Alex Freeman</h1>
+                  <h3 id="tagline">Official Web Presence</h3>
+                </div>
+              </div>
 
-<h1 id="life-title">Conway's Game of LIFE</h1>
+              <nav style="float: right">
+                <ul>
+                  <li><a href="./">Life</a></li>
+                </ul>
+              </nav>
+            </header>
+
+            <div id="page-title">
+              <h1>Life</h1>
+            </div>
+
+            <div id="banner">
+              <img src="./static/base/images/IslayHillSunrise-scaled.jpg" alt="Sunrise banner" />
+              <p class="caption">Conway's Game of Life</p>
+            </div>
+
+            <main>
+              <section class="centered">
+        <h1 id="life-title">Conway's Game of LIFE</h1>
 <hr />
 
 <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">
@@ -164,18 +199,31 @@
 <div id="menu-wrapper">
   <div id="menu-root"></div>
 </div>
+              </section>
+            </main>
 
-{% endblock content %} {% block scripts %}
-<script src="{% static 'life/scripts/points.js' %}"></script>
-<script src="{% static 'life/scripts/game.js' %}"></script>
-<script src="{% static 'life/scripts/grid.js' %}"></script>
-<script src="{% static 'life/scripts/board.js' %}"></script>
-<script src="{% static 'life/scripts/api.js' %}"></script>
-<script src="{% static 'life/scripts/input.js' %}"></script>
-<script src="{% static 'life/scripts/menu.js' %}"></script>
+            <footer>
+              <span id="copyright">
+                <p>&copy; 2024 The Alex Freeman</p>
+              </span>
+            </footer>
 
-<script type="text/javascript">
-  const INPUT = new InputHandler();
+            <script>
+              window.LIFE_API_CONFIG = {
+                catalogUri: "./catalog.json",
+                persistenceDisabled: true,
+              };
+            </script>
+            <script src="./static/base/scripts/base.js"></script>
+            <script src="./static/life/scripts/points.js"></script>
+            <script src="./static/life/scripts/game.js"></script>
+            <script src="./static/life/scripts/grid.js"></script>
+            <script src="./static/life/scripts/board.js"></script>
+            <script src="./static/life/scripts/api.js"></script>
+            <script src="./static/life/scripts/input.js"></script>
+            <script src="./static/life/scripts/menu.js"></script>
+            <script type="text/javascript">
+        const INPUT = new InputHandler();
   const gridFrame = document.getElementById("grid-frame");
   const GAME = new PlayableBoard(
     {
@@ -390,5 +438,6 @@
   function toggleCell(p) {
     INPUT.populationCount += GAME.toggleCell(p);
   }
-</script>
-{% endblock scripts %}
+            </script>
+          </body>
+        </html>
